@@ -1,2 +1,2 @@
 #!/bin/bash
-./node_modules/coffee-script/bin/coffee hitchhike-webclient.coffee
+./node_modules/coffee-script/bin/coffee app.coffee
