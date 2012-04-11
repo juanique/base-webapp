@@ -4,7 +4,6 @@ fs = require("fs")
 sys = require("sys")
 
 app = express.createServer()
-
 app.configure 'development', ->
 
 app.error (err, req, res, next) ->
@@ -14,8 +13,17 @@ app.error (err, req, res, next) ->
 publicDir = __dirname + "/public"
 srcDir = __dirname + "/src"
 
-app.use express.compiler(src: srcDir, dest: publicDir, enable: ["coffeescript", "less", "jade"])
+app.set "views", srcDir
+
+app.use express.compiler(src: srcDir, dest: publicDir, enable: ["coffeescript", "less"])
 app.use express.static(publicDir)
 app.use express.bodyParser()
+
+app.get /^\/$/, (req, res) ->
+  res.render "index.jade", layout: false
+
+app.get /.+\.html/, (req, res) ->
+  jadeFile = req.originalUrl.replace(/html$/, "jade").substring(1)
+  res.render jadeFile, layout: false
 
 app.listen(3000)
